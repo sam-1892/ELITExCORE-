@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Stream Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Shaka Player -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0f172a;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #020617;
+      padding: 15px;
+      border-radius: 12px;
+      width: 95%;
+      max-width: 420px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      text-align: center;
+    }
+
+    video {
+      width: 100%;
+      background: #000;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .note {
+      font-size: 12px;
+      opacity: 0.6;
+      margin-top: 8px;
+    }
+
+    /* 🔥 POPUP STYLES */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .popup {
+      background: #020617;
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 320px;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(0,0,0,0.8);
+    }
+
+    .popup h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .popup p {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 15px;
+    }
+
+    .popup-btn {
+      display: block;
+      width: 100%;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .join-btn {
+      background: #22c55e;
+      color: #000;
+    }
+
+    .already-btn {
+      background: #334155;
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 🔥 POPUP -->
+  <div class="popup-overlay" id="popup">
+    <div class="popup">
+      <h3>Join Our Telegram 🚀</h3>
+      <p>HD links &amp; live updates Telegram channel par milenge</p>
+
+      <a class="popup-btn join-btn" href="https://t.me/Elitexcore" target="_blank" onclick="closePopup()">
+        Join Telegram Channel
+      </a>
+
+      <div class="popup-btn already-btn" onclick="closePopup()">
+        Already Joined
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYER -->
+  <div class="box">
+    <video id="video" controls autoplay muted playsinline>
+    </video>
+
+    <div class="note">
+      HD links &amp; updates Telegram par milenge
+    </div>
+  </div>
+
+  <script>
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    async function initPlayer() {
+
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        alert("Browser not supported");
+        return;
+      }
+
+      const video = document.getElementById("video");
+      const player = new shaka.Player(video);
+
+      player.addEventListener("error", e => {
+        console.error("Shaka Error:", e.detail);
+      });
+
+      player.configure({
+        drm: {
+          clearKeys: {
+            "1779c27b9d077a3ba0c9cc1bb9a94b9f":
+            "cc5cf3b7928fb9e0a1ee6a8b566f0a8e"
+          }
+        }
+      });
+
+      try {
+        await player.load(
+          "https://a201aivottlinear-a.akamaihd.net/OTTB/lhr-nitro/clients/dash/enc/f60kqesunw/out/v1/a435ed7a00f947deb4369b46d8f2fb70/cenc.mpd"
+        );
+        console.log("✅ MPD Loaded Successfully");
+      } catch (e) {
+        console.error("❌ MPD Load Error:", e);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", initPlayer);
+  </script>
+
+
+</body></html>
